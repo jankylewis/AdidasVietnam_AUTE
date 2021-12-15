@@ -77,18 +77,27 @@ namespace AdidasVietnam_AUTE.AbstractClass
             //actions.MoveToElement(elementLocator).Click().Perform();
             elementLocator.Click();
         }
-        public static void sendKeyToElement(By elementLocator, String key)
+        public static void sendKeyToElement(IWebElement elementLocator, String key)
         {
             var wait = new WebDriverWait(driver, new TimeSpan(0, 0, 30));
-            var element = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(elementLocator));
+            var element = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(elementLocator));
             if (key != null)
             {
-                driver.FindElement(elementLocator).Clear();
-                driver.FindElement(elementLocator).SendKeys(key);
+                elementLocator.Clear();
+                elementLocator.SendKeys(key);
             }
             else
             {
                 Console.WriteLine("\n //------**----------- KEY CANNOT BE EMPTY! -----------**-------// \n");
+            }
+        }
+        public static void pressEnterToElement(IWebElement elementLocator)
+        {
+            var wait = new WebDriverWait(driver, new TimeSpan(0, 0, 30));
+            var element = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(elementLocator));
+            if (elementLocator.Enabled || elementLocator.Displayed)
+            {
+                elementLocator.SendKeys(Keys.Enter);
             }
         }
 

@@ -36,6 +36,19 @@ namespace AdidasVietnam_AUTE.pageObjects
         [CacheLookup]
         private IWebElement BTN_LOGIN_LOCATOR;
 
+        [FindsBy(How = How.XPath, Using = "//input[@id='login-password' and @type= 'password']")]
+        [CacheLookup]
+        private IWebElement TXT_PASSWORD_LOCATOR;
+
+        [FindsBy(How = How.XPath, Using = "//input[@id='login-email' and @type= 'email']")]
+        [CacheLookup]
+        private IWebElement TXT_EMAIL_LOCATOR;
+        
+
+        [FindsBy(How = How.XPath, Using = "//input[@type= 'checkbox']")]
+        [CacheLookup]
+        private IWebElement CHK_REMEMBER_LOCATOR;
+
         public void clickOnLogInLbl()
         {
             clickOnElement(LBL_LOGIN_LOCATOR);
@@ -44,6 +57,25 @@ namespace AdidasVietnam_AUTE.pageObjects
         public void clickOnLogInBtn()
         {
             clickOnElement(BTN_LOGIN_LOCATOR);
+        }
+
+        public void sendKeyToPasswordTxt(String key)
+        {
+            sendKeyToElement(TXT_PASSWORD_LOCATOR, key);
+        }
+        public void sendKeyToEmailTxt(String key)
+        {
+            sendKeyToElement(TXT_EMAIL_LOCATOR, key);
+        }
+
+        public void clickOnRememberChk()
+        {
+            clickOnElement(CHK_REMEMBER_LOCATOR);
+        }
+
+        public void pressEnterToLogInBtn()
+        {
+            pressEnterToElement(BTN_LOGIN_LOCATOR);
         }
 
     }
