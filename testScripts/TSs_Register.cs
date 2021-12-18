@@ -30,8 +30,12 @@ namespace AdidasVietnam_AUTE.testScripts
         internal readonly String browser = "chrome";
         internal static IWebDriver dr;
 
-        
-
+        //store the data to fill out the information field located at registration form
+        internal String firstNameTxt;
+        internal String lastNameTxt;
+        internal String genderTxt;
+        internal String emailTxt;
+        internal String passwordTxt;
 
         //test template to take actions before each test case
         [SetUp]
@@ -121,7 +125,6 @@ namespace AdidasVietnam_AUTE.testScripts
             for (int index= 0; index< 9; index++)
             {
                 errorMessagesGetTxt.Add(driver.FindElement(locatorsStorageList[index]).Text.ToString().Trim());
-
                 Console.WriteLine("\nError message number "+ (index+1)+ ": " + 
                     driver.FindElement(locatorsStorageList[index]).Text.ToString().Trim() 
                     + " \n");
@@ -166,6 +169,7 @@ namespace AdidasVietnam_AUTE.testScripts
                     {
                         Console.WriteLine("\nASSERTED UNSUCCESSFULLY ERROR MESSAGE " + (indexForAssertion + 1) + " -> TEST CASE IS FAILED!\n");
                         Assert.IsFalse(true);
+                        Assert.Fail();
                     }
 
                 }
@@ -191,12 +195,45 @@ namespace AdidasVietnam_AUTE.testScripts
 
         }
 
+        //test case 002
+        [Test]
+        /*
+         *Test case 002:
+         * - S1: navigate to website
+         * - S2: navigate to Log in site based on clicking the Login label on the navigation
+         * - S3: inputted the required information fields in a valid way
+         * - S4: click on Register button
+         * - S5: verify the first name that we registered
+         */
         public void registerTest002()
         {
+            //store the test data
+            this.firstNameTxt = "Raul";
+            this.lastNameTxt = "Gonzales";
+            this.genderTxt = "Male";
+
+            //initialize Log in and Register page objects to use the defined method
             logIn = new LogInPage(driver);
             register = new RegisterPage(driver);
 
-            
+            string afRandomStringGenerator = generateRandomString((int)4);
+            //Console.WriteLine("\n"+ generateRandomString((int)4)+ "\n");
+            logIn.clickOnLogInLbl();
+            Console.WriteLine("\n //------**----------- CLICKED ON LOGIN LABEL -----------**-------// \n");
+            register.clickOnGoToRegistrationBtn();
+            Console.WriteLine("\n //------**----------- CLICKED ON GO TO REGISTRATION BUTTON -----------**-------// \n");
+            register.sendKeyToFirstName(firstNameTxt+ afRandomStringGenerator);
+            Console.WriteLine("\n //------**----------- INPUTTED INTO FIRST NAME FIELD -----------**-------// \n");
+            register.sendKeyToLastName(lastNameTxt + afRandomStringGenerator);
+            Console.WriteLine("\n //------**----------- INPUTTED INTO LAST NAME FIELD -----------**-------// \n");
+            register.selectGender(genderTxt, driver);
+            Console.WriteLine("\n //------**----------- SELECTED GENDER FIELD -----------**-------// \n");
+            register.sendKeyToEmail(emailTxt + afRandomStringGenerator);
+            Console.WriteLine("\n //------**----------- INPUTTED INTO EMAIL FIELD -----------**-------// \n");
+            register.sendKeyToPassword(passwordTxt + afRandomStringGenerator);
+            Console.WriteLine("\n //------**----------- INPUTTED INTO PASSWORD FIELD -----------**-------// \n");
+
+
         }
 
     }

@@ -19,6 +19,7 @@ namespace AdidasVietnam_AUTE.AbstractClass
     {
         public static IWebDriver driver;
         public static Actions actions;
+        public static Random randomString = new Random();
         //public static WebDriverWait wait = new WebDriverWait(driver, new TimeSpan(0, 0, (int)2.5));
         public static void initializeTestCase(String browser)
         {
@@ -100,7 +101,11 @@ namespace AdidasVietnam_AUTE.AbstractClass
                 elementLocator.SendKeys(Keys.Enter);
             }
         }
-
-
+        public static String generateRandomString(int length)
+        {
+            const String chars= "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new String (Enumerable.Repeat(chars, length)
+                .Select(str=> str[randomString.Next(str.Length)]).ToArray());
+        }
     }
 }
