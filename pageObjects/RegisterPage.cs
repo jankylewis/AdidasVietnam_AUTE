@@ -154,6 +154,27 @@ namespace AdidasVietnam_AUTE.pageObjects
             }
         }
 
+        public void checkPrivacyConsent(String strNameAttribute, IWebDriver dr)
+        {
+            By PAR_CHK_CONSENT = By.XPath("//h2[contains(text(), 'Register')]//following::form[@novalidate]");
+            By CHILD_CHK_CONSENT = By.XPath("//label[contains((@class), 'checkbox')]//input[@type= 'checkbox']");
+            IWebElement listParConsent = dr.FindElement(PAR_CHK_CONSENT);
+            ReadOnlyCollection<IWebElement> listChildConsent =
+                dr.FindElements(CHILD_CHK_CONSENT);
+            int consentSize = 0;
+            foreach (IWebElement consent in listChildConsent)
+            {
+                if ((consent.GetAttribute("name")).Equals(strNameAttribute)) {
+                    consent.Click();
+                }
+            }
+        }
+
+        public void pauseWithThread(int time)
+        {
+            pauseWithThreadSleep(time);
+        }
+
 
 
 

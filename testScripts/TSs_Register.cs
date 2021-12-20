@@ -36,6 +36,12 @@ namespace AdidasVietnam_AUTE.testScripts
         internal String genderTxt;
         internal String emailTxt;
         internal String passwordTxt;
+        internal String checkPrivacyConsentNameAttribute1;
+        internal String checkPrivacyConsentNameAttribute2;
+        internal String checkPrivacyConsentNameAttribute3;
+        internal String successfulMsgAfterRegisteringTxt;
+        internal String greetingMsgAfterRegisteringTxt;
+        internal String welcomeLnkTxt;
 
         //test template to take actions before each test case
         [SetUp]
@@ -207,16 +213,34 @@ namespace AdidasVietnam_AUTE.testScripts
          */
         public void registerTest002()
         {
+            //store locators
+            By SUCCESSFUL_MSG_LOCATOR = 
+                By.XPath("//div[@class= 'gl-callout']//h5");
+            By GREETING_AFTER_REGISTERING_LOCATOR = 
+                By.XPath("//div[normalize-space(@data-auto-id= 'welcome-message-section')]//h4");
+            By LNK_WELCOME_LOCATOR =
+                By.XPath("//a[contains(@manual_cm_sp, 'username')]");
+
             //store the test data
             this.firstNameTxt = "Raul";
             this.lastNameTxt = "Gonzales";
             this.genderTxt = "Male";
+            this.checkPrivacyConsentNameAttribute1 = "terms";
+            this.checkPrivacyConsentNameAttribute2 = "explicitConsent";
+            this.checkPrivacyConsentNameAttribute3 = "explicitConsent2";
+            this.passwordTxt = "Raulgonzales";
+            this.successfulMsgAfterRegisteringTxt = "Account Created";
+            this.greetingMsgAfterRegisteringTxt = "Hi" + firstNameTxt;
+            this.welcomeLnkTxt = "welcome back " + firstNameTxt.ToLower();
 
             //initialize Log in and Register page objects to use the defined method
             logIn = new LogInPage(driver);
             register = new RegisterPage(driver);
 
+            //input information into all fields at registration form
             string afRandomStringGenerator = generateRandomString((int)4);
+            this.emailTxt = "raulgonzales"+ afRandomStringGenerator+ "@gmail.com";
+
             //Console.WriteLine("\n"+ generateRandomString((int)4)+ "\n");
             logIn.clickOnLogInLbl();
             Console.WriteLine("\n //------**----------- CLICKED ON LOGIN LABEL -----------**-------// \n");
@@ -232,9 +256,59 @@ namespace AdidasVietnam_AUTE.testScripts
             Console.WriteLine("\n //------**----------- INPUTTED INTO EMAIL FIELD -----------**-------// \n");
             register.sendKeyToPassword(passwordTxt + afRandomStringGenerator);
             Console.WriteLine("\n //------**----------- INPUTTED INTO PASSWORD FIELD -----------**-------// \n");
+            register.checkPrivacyConsent(checkPrivacyConsentNameAttribute1, driver);
+            Console.WriteLine("\n //------**----------- CLICKED ON PRIVACY CONSENT CHECK BOX 1 -----------**-------// \n");
+            register.checkPrivacyConsent(checkPrivacyConsentNameAttribute2, driver);
+            Console.WriteLine("\n //------**----------- CLICKED ON PRIVACY CONSENT CHECK BOX 2 -----------**-------// \n");
+            register.checkPrivacyConsent(checkPrivacyConsentNameAttribute3, driver);
+            Console.WriteLine("\n //------**----------- CLICKED ON PRIVACY CONSENT CHECK BOX 3 -----------**-------// \n");
+            register.clickOnRegisterBtn();
+            Console.WriteLine("\n //------**----------- CLICKED ON REGISTER BUTTON AFTER COMPLETING FILLING INFORMATION FIELDS -----------**-------// \n");
 
+            //begin assertions
+            string successfulMsgGetTxt= dr.FindElement(SUCCESSFUL_MSG_LOCATOR).Text.ToString().Trim();
+            string greetingMsgAfterRegisteringGetTxt = dr.FindElement(GREETING_AFTER_REGISTERING_LOCATOR).Text.ToString().Trim();
+            string welcomeLnkGetTxt= dr.FindElement(LNK_WELCOME_LOCATOR).Text.ToString().Trim();
+            Console.WriteLine("\n"+ "Successful message: "+ successfulMsgGetTxt+ "\n");
+            Console.WriteLine("\n" + "Greeting message: " + greetingMsgAfterRegisteringGetTxt + "\n");
+            Console.WriteLine("\n" + "Welcome message: " + welcomeLnkGetTxt + "\n");
+            register.pauseWithThread(300);
+        
+            //asserting with checkpoints
+            if (successfulMsgGetTxt.Equals(successfulMsgGetTxt) &&
+                    greetingMsgAfterRegisteringGetTxt.Equals(greetingMsgAfterRegisteringTxt) &&
+                        welcomeLnkGetTxt.Equals(welcomeLnkTxt))
+            {
+                this.checkIfTestCaseIsPassed = true;
 
-        }
+                //asserted successfully those messages after registering
+                if (checkIfTestCaseIsPassed)
+                {
+                    Console.WriteLine("\n---------------------------------" +
+                                      "\nTEST CASE REGISTER 002 IS PASSED!\n" +
+                                        "---------------------------------\n");
+                    Assert.Pass();
+                }
+
+                //asserted unsuccessfully those messages after registering
+                else 
+                {
+                    Console.WriteLine("\n---------------------------------" +
+                                      "\nTEST CASE REGISTER 002 IS FAILED!\n" +
+                                        "---------------------------------\n");
+                    Assert.Fail();
+                }
+            }
+            else
+            {
+                this.CheckIfTestCaseIsFailed = true;
+                Console.WriteLine("\n---------------------------------" +
+                  "\nTEST CASE REGISTER 002 IS FAILED!\n" +
+                    "---------------------------------\n");
+                Assert.Fail();
+            }
+        }//finish Test Case 002
+
 
     }
 }
